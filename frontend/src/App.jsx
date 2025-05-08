@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import NavBar from './components/NavBar';
+import Navbar from './components/Navbar';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import HomePage from "./pages/HomePage";
 import SignUpPage from "./pages/SignUpPage";
@@ -33,7 +33,7 @@ const App = () => {
   return (
     <div data-theme={theme}>
 
-      <NavBar />
+      <Navbar />
     
       <Routes>
 

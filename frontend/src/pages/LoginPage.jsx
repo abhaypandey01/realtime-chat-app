@@ -3,6 +3,7 @@ import { useAuthStore } from '../store/useAuthStore';
 import AuthImagePattern from "../components/AuthImagePattern";
 import { Link } from "react-router-dom";
 import { Eye, EyeOff, Loader2, Lock, Mail, MessageSquare } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 function LoginPage() {
 
@@ -13,9 +14,15 @@ function LoginPage() {
     password: ""
   });
 
+  const navigate = useNavigate();
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    login(formData);
+    const success = await login(formData);
+    if(success){
+      navigate("/");
+    }
   }
 
   return (
@@ -86,7 +93,7 @@ function LoginPage() {
               </div>
             </div>
 
-            <Link to={'/'}>
+            
             <button type="submit" className="btn btn-primary w-full" disabled={isLoggingIn}>
               {isLoggingIn ? (
                 <>
@@ -97,7 +104,7 @@ function LoginPage() {
                 "Sign in"
               )}
             </button>
-            </Link>
+            
           </form>
 
           <div className="text-center">

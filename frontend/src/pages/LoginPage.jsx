@@ -86,6 +86,7 @@ function LoginPage() {
               </div>
             </div>
 
+            <Link to={'/'}>
             <button type="submit" className="btn btn-primary w-full" disabled={isLoggingIn}>
               {isLoggingIn ? (
                 <>
@@ -96,6 +97,7 @@ function LoginPage() {
                 "Sign in"
               )}
             </button>
+            </Link>
           </form>
 
           <div className="text-center">

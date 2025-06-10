@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { axiosInstance } from "../lib/axios";
 import { toast } from "react-hot-toast";
 import { useAuthStore } from "./useAuthStore";
+import { useChatStore } from "./useChatStore";
 
 export const useGroupStore = create((set, get) => ({
     groups: [],

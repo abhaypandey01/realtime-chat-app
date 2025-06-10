@@ -4,6 +4,7 @@ import { useAuthStore } from "../store/useAuthStore";
 import { useChatStore } from "../store/useChatStore";
 import { useGroupStore } from "../store/useGroupStore";
 import GroupManagementModal from "./GroupManagementModal";
+import { useNavigate } from "react-router-dom";
 
 const ChatHeader = () => {
     const { selectedUser, clearSelectedChat, selectedChatType } = useChatStore();
@@ -13,6 +14,13 @@ const ChatHeader = () => {
 
     const isUserChat = selectedChatType === 'user' && selectedUser;
     const isGroupChat = selectedGroup;
+    const navigate = useNavigate();
+
+    const handleCloseChat = () => {
+        clearSelectedChat();      // Clear user chat
+        setSelectedGroup(null);   // Clear group chat
+        navigate("/");            // Go to home page
+    };
 
     if (!isUserChat && !isGroupChat) return null;
 
@@ -77,7 +85,7 @@ const ChatHeader = () => {
 
                         {/* Close button */}
                         <button 
-                            onClick={clearSelectedChat}
+                            onClick={handleCloseChat}
                             className="btn btn-ghost btn-sm btn-circle"
                             title="Close Chat"
                         >

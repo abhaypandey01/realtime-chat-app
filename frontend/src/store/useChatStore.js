@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { axiosInstance } from "../lib/axios";
 import { toast } from "react-hot-toast";
 import { useAuthStore } from "./useAuthStore";
+import { useGroupStore } from "./useGroupStore";
 
 export const useChatStore = create((set, get) => ({
     messages: [],
@@ -72,6 +73,10 @@ export const useChatStore = create((set, get) => ({
             selectedChatType: 'user',
             messages: []
         });
+        // Clear group messages and selected group in groupStore
+    const groupStore = useGroupStore.getState();
+    groupStore.clearGroupMessages();
+    groupStore.setSelectedGroup(null); // <-- Add this line
     },
 
     // Clear selected chat

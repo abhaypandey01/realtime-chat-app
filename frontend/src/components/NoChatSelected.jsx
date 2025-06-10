@@ -18,8 +18,13 @@ const NoChatSelected = () => {
                 {/* Welcome Text */}
                 <h2 className="text-2xl font-bold">Welcome to Quick Chat Pro!</h2>
                 <p className="text-base-content/60">
-                    Select a conversation from the sidebar to start chatting
+                    Select a user or group from the sidebar to start chatting
                 </p>
+                <div className="text-sm text-base-content/50 mt-4 space-y-1">
+                    <p>• Chat with individuals privately</p>
+                    <p>• Create and join groups</p>
+                    <p>• Real-time messaging with images</p>
+                </div>
             </div>
         </div>
     );

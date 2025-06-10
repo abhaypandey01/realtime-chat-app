@@ -7,6 +7,7 @@ export const useChatStore = create((set, get) => ({
     messages: [],
     users: [],
     selectedUser: null,
+    selectedChatType: null, // 'user' | 'group'
     isUsersLoading: false,
     isMessagesLoading: false,
 
@@ -65,5 +66,25 @@ export const useChatStore = create((set, get) => ({
         socket.off("newMessage");
     },
 
-    setSelectedUser: async (selectedUser) => set({selectedUser}),
+    setSelectedUser: async (selectedUser) => {
+        set({
+            selectedUser,
+            selectedChatType: 'user',
+            messages: []
+        });
+    },
+
+    // Clear selected chat
+    clearSelectedChat: () => {
+        set({
+            selectedUser: null,
+            selectedChatType: null,
+            messages: []
+        });
+    },
+
+    // Set chat type (for future use when switching between user and group chats)
+    setSelectedChatType: (chatType) => {
+        set({ selectedChatType: chatType });
+    },
 }))

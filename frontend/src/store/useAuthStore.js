@@ -65,6 +65,15 @@ export const useAuthStore = create((set, get) => ({
             set({ authUser: null });
             toast.success("Logged out successfully");
             get().disconnectSocket();
+            
+            // Clear group data on logout
+            try {
+                const { useGroupStore } = await import('./useGroupStore');
+                useGroupStore.getState().clearGroupData();
+            } catch (error) {
+                // Handle case where group store might not be available
+                console.log("Group store not available:", error);
+            }
         } catch (error) {
             toast.error(error.response.data.message);
         }

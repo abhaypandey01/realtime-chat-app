@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { useChatStore } from "../store/useChatStore";
+import { useGroupStore } from "../store/useGroupStore";
 import { Image, Send, X } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -7,7 +8,13 @@ const MessageInput = () => {
   const [text, setText] = useState("");
   const [imagePreview, setImagePreview] = useState(null);
   const fileInputRef = useRef(null);
-  const { sendMessage } = useChatStore();
+  
+  const { sendMessage, selectedUser, selectedChatType } = useChatStore();
+  const { sendGroupMessage, selectedGroup, isSendingGroupMessage } = useGroupStore();
+  
+  const isUserChat = selectedChatType === 'user' && selectedUser;
+  const isGroupChat = selectedGroup;
+  const isSending = isGroupChat ? isSendingGroupMessage : false;
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -31,12 +38,19 @@ const MessageInput = () => {
   const handleSendMessage = async (e) => {
     e.preventDefault();
     if (!text.trim() && !imagePreview) return;
+    if (!isUserChat && !isGroupChat) return;
 
     try {
-      await sendMessage({
+      const messageData = {
         text: text.trim(),
         image: imagePreview,
-      });
+      };
+
+      if (isUserChat) {
+        await sendMessage(messageData);
+      } else if (isGroupChat) {
+        await sendGroupMessage(selectedGroup._id, messageData);
+      }
 
       // Clear form
       setText("");
@@ -46,6 +60,11 @@ const MessageInput = () => {
       console.error("Failed to send message:", error);
     }
   };
+
+  // Don't render if no chat is selected
+  if (!isUserChat && !isGroupChat) {
+    return null;
+  }
 
   return (
     <div className="p-4 w-full">
@@ -74,9 +93,10 @@ const MessageInput = () => {
           <input
             type="text"
             className="w-full input input-bordered rounded-lg input-sm sm:input-md"
-            placeholder="Type a message..."
+            placeholder={isGroupChat ? `Message ${selectedGroup.name}...` : "Type a message..."}
             value={text}
             onChange={(e) => setText(e.target.value)}
+            disabled={isSending}
           />
           <input
             type="file"
@@ -90,6 +110,7 @@ const MessageInput = () => {
             type="button"
             className={`hidden sm:flex btn btn-circle ${imagePreview ? "text-emerald-500" : "text-zinc-400"}`}
             onClick={() => fileInputRef.current?.click()}
+            disabled={isSending}
           >
             <Image size={20} />
           </button>
@@ -97,9 +118,13 @@ const MessageInput = () => {
         <button
           type="submit"
           className="btn btn-sm btn-circle"
-          disabled={!text.trim() && !imagePreview}
+          disabled={(!text.trim() && !imagePreview) || isSending}
         >
-          <Send size={22} />
+          {isSending ? (
+            <span className="loading loading-spinner loading-sm"></span>
+          ) : (
+            <Send size={22} />
+          )}
         </button>
       </form>
     </div>

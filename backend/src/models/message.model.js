@@ -9,7 +9,11 @@ const messageSchema = new Schema({
     receiverId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
-        required: true
+        // required: true
+    },
+    groupId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Group",
     },
     text: {
         type: String,

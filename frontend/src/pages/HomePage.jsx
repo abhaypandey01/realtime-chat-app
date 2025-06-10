@@ -1,12 +1,16 @@
 import React from 'react'
 import { useChatStore } from '../store/useChatStore'
+import { useGroupStore } from '../store/useGroupStore'
 import Sidebar from '../components/Sidebar';
 import NoChatSelected from '../components/NoChatSelected';
 import ChatContainer from '../components/ChatContainer';
 
 function HomePage() {
 
-  const { selectedUser } = useChatStore();
+  const { selectedUser, selectedChatType } = useChatStore();
+  const { selectedGroup } = useGroupStore();
+  
+  const hasActiveChat = (selectedChatType === 'user' && selectedUser) || selectedGroup;
 
   return (
     <div className='h-screen bg-base-200'>
@@ -15,7 +19,7 @@ function HomePage() {
           <div className='flex h-full rounded-lg overflow-hidden '>
 
             <Sidebar />
-            {!selectedUser ? <NoChatSelected /> : <ChatContainer />}
+            {!hasActiveChat ? <NoChatSelected /> : <ChatContainer />}
 
           </div>
         </div>
